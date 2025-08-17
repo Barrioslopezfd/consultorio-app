@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "start": "npx ts-node index.ts"
-	
+    "start": "npx ts-node server.ts"
   },
   "repository": {
     "type": "git",
