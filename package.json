@@ -1,0 +1,22 @@
+{
+  "name": "consultorio-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Barrioslopezfd/consultorio-app.git"
+  },
+  "author": "fran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Barrioslopezfd/consultorio-app/issues"
+  },
+  "homepage": "https://github.com/Barrioslopezfd/consultorio-app#readme",
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
