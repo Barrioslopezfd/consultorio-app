@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "npm test",
-    "start": "npx ts-node server.ts"
+    "build": "tsc",
+    "start": "npm run build && node dist/server.js"
   },
   "repository": {
     "type": "git",
