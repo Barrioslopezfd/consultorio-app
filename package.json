@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "start": "npx ts-node index.ts"
+	
   },
   "repository": {
     "type": "git",
