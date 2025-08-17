@@ -1,9 +1,8 @@
-import http from 'node:http';
+function saludar() {
+	console.log('hola che')
+}
 
-http.createServer((_, res) => {
-	res.writeHead(200);
-	res.end('hello world\n');
-}).listen({
-	host: '0.0.0.0',
-	port: 8000
-});
+const botonsito = document.getElementById('boton')
+if (botonsito != null) {
+	botonsito.addEventListener('click', saludar)
+}
