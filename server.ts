@@ -3,39 +3,70 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const ROOT_DIR = path.resolve(__dirname, '..');
+interface IResp {
+	filePath: string,
+	contentType: string,
+}
 
 http.createServer((req, res) => {
-    const url = req.url === '/' ? '/home.html' : req.url!;
-    let filePath: string;
+	const resp = getPath(req.url);
+	const filePath: string = resp.filePath;
+	const contentType: string = resp.contentType;
 
-    if (url.endsWith('.html')) {
-        filePath = path.join(ROOT_DIR, url);
-    } else {
-        filePath = path.join(__dirname, url);
-    }
+	fs.readFile(filePath, (err, data) => {
+		if (err) {
+			res.writeHead(404);
+			res.end('Pagina no encontrada');
+			return;
+		}
 
-    console.log('Buscando archivo:', filePath);
-
-     fs.readFile(filePath, (err, data) => {
-        if (err) {
-            res.writeHead(404);
-            res.end('Pagina no encontrada');
-            return;
-        }
-
-        let contentType = 'text/plain';
-        if (filePath.endsWith('.html')) contentType = 'text/html';
-        else if (filePath.endsWith('.js')) contentType = 'application/javascript';
-        else if (filePath.endsWith('.css')) contentType = 'text/css';
-
-        res.writeHead(200, { 'Content-Type': contentType });
-        res.end(data);
-    });
+		res.writeHead(200, { 'Content-Type': contentType });
+		res.end(data);
+	});
 }).listen({
-    host: '0.0.0.0',
-    port: 8000
+	host: '0.0.0.0',
+	port: 8000
 });
+
+function getPath(url: string | undefined): IResp {
+
+	const HTML: string = 'text/html';
+	const JS: string = 'text/javascript';
+	const CSS: string = 'text/css';
+
+	let resp: IResp = {
+		filePath: '',
+		contentType: HTML,
+	};
+
+	if (url == undefined) {
+		return resp
+	}
+
+	const __dirname = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../src/pages')
+	const __dist = path.join(path.dirname(fileURLToPath(import.meta.url)), url)
+	switch (url) {
+		case '/':
+		case '/home':
+			resp.filePath = path.join(__dirname, 'home/home.html')
+			break
+		case '/user':
+			resp.filePath = path.join(__dirname, 'user/user.html')
+			break
+		default:
+			resp.filePath = __dist
+	}
+
+	const usplit = url.split('.')
+	switch (usplit[usplit.length - 1]) {
+		case 'js':
+			resp.contentType = JS;
+			break;
+		case 'css':
+			resp.contentType = CSS;
+			break;
+	}
+
+	return resp
+
+}
