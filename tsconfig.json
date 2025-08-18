@@ -94,6 +94,6 @@
   },
   "include": [
     "server.ts",
-    "source/pages/**/*"
+    "src/pages/**/*"
   ]
 }
