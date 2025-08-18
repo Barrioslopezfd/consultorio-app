@@ -1,5 +1,5 @@
 function saludar1() {
-	console.log('hola che')
+	alert("hola si buenas")
 }
 
 const botonsito = document.getElementById('boton')
