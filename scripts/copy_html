@@ -1,0 +1,15 @@
+#!/bin/bash
+
+base="dst/pages"
+src="src/pages"
+
+[ -d dst ] || { echo "falta dst"; exit 1; }
+
+for f in $src/*/*.html; do
+  subdir=$(basename "$(dirname "$f")")
+  if [ -d "$base/$subdir" ]; then
+    cp -f "$f" "$base/$subdir/"
+  else
+    echo "falta $base/$subdir"
+  fi
+done

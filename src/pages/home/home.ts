@@ -1,8 +1,8 @@
-function saludar1() {
+function saludar3() {
 	console.log('hola che')
 }
 
-const botonsito = document.getElementById('boton')
-if (botonsito != null) {
-	botonsito.addEventListener('click', saludar1)
+const botonsito3 = document.getElementById('boton')
+if (botonsito3 != null) {
+	botonsito3.addEventListener('click', saludar3)
 }
