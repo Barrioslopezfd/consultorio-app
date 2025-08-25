@@ -1,112 +1,108 @@
 import http, { ServerResponse } from 'node:http';
 import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const
+const HTML = "html"
+const SCSS = "scss"
+const JS = "js"
 
-const FILETYPES = [
-	"js",
-	"html",
-	"css"
-];
+const MIME: { [key: string]: string } = {
+	"html": "text/html; charset=utf-8",
+	"scss": "text/css; charset=utf-8",
+	"js": "application/javascript; charset=utf-8",
+	// ".json": "application/json; charset=utf-8",
+};
+
 const ROUTES = [
-	"/",
-	"/admin",
-	"/cashier",
-	"/display"
+	"home",
+	"admin",
+	"cashier",
+	"display"
 ];
 
-interface IResp {
-	filePath: string,
-	contentType: string,
-}
+// interface IResp {
+// 	ContentType: string,
+// 	FileType: string,
+// 	FileName: string,
+// }
 
-http.createServer((req: http.IncomingMessage, res: ServerResponse) => {
-	const URL = req.url?.split("?")[0]
+const server = http.createServer((req: http.IncomingMessage, res: ServerResponse) => {
+	const urlBody = req.url?.split("?")[0]
+	const URL = urlBody == "/" ? "/home" : urlBody
 	console.log(`req.url -> ${URL}`)
 
 	if (URL == undefined) {
 		res.writeHead(400);
-		res.end('Bad Request');
+		res.end('URL is undefined');
 		return;
 	}
-	if (!ROUTES.includes(URL)) {
+	const fileName = getFileName(URL)
+	console.log("Luego de URL == undenfined con: " + URL)
+	if (!ROUTES.includes(fileName)) {
 		res.writeHead(404);
 		res.end('Page Not Found');
 		return;
 	}
+	console.log("Luego de !ROUTES.includes(URL) con: " + URL)
 
-	const resp = getPath(URL);
-	const filePath: string = resp.filePath;
-	const contentType: string = resp.contentType;
-
-	fs.readFile(filePath, (err, data) => {
+	const fileType: string | Error = getFileType(URL)
+	if (fileType instanceof Error) {
+		res.writeHead(404);
+		res.end('Page does not exist');
+		return;
+	}
+	const contentType = getContentType(fileType)
+	const filePath = getPath(fileName, fileType)
+	try {
+		const data = fs.readFileSync(filePath)
+		res.writeHead(200, { 'Content-Type': contentType });
+		res.end(data);
+	} catch (err) {
 		if (err) {
 			res.writeHead(404);
 			res.end('Page Not Found');
 			return;
 		}
+	}
+});
 
-		res.writeHead(200, { 'Content-Type': contentType });
-		res.end(data);
-	});
-}).listen({
+server.listen({
 	host: '0.0.0.0',
 	port: 8000
 });
 
 function getFileName(url: string): string {
+	console.log(`@@@@@@ ${url.slice(1).split('.')[0]}`)
+	if (!url.includes(".")) {
+		return url.slice(1)
+	}
+	return url.slice(1).split('.')[0]
 }
 
-function getPath(url: string): IResp {
-
-	const HTML: string = 'text/html';
-	const JS: string = 'text/javascript';
-	const CSS: string = 'text/css';
-
-	let resp: IResp = {
-		filePath: 'NotFound',
-		contentType: HTML,
-	};
-
-	if (url == undefined) {
-		return resp
+function getFileType(url: string): string | Error {
+	if (!url.includes('.')) {
+		return HTML
 	}
+	const extension = url.split('.')[1]
+	console.log("WWWWWWWW" + " " + extension)
 
-	const PAGESDIR = path.resolve(process.cwd(), 'dst/pages')
-	console.log(`PAGESDIR: ${PAGESDIR}`)
-	const __dist = path.join(path.dirname(fileURLToPath(import.meta.url)), url)
-	console.log(`__dist: ${__dist}`)
-	// console.log(`URL: ${url}`)
-	console.log(`fielURLToPath: ${fileURLToPath(import.meta.url)}`)
-	switch (url) {
-		case '/':
-			resp.filePath = path.join(PAGESDIR, 'home/home.html')
-			break
-		case '/admin':
-			resp.filePath = path.join(PAGESDIR, 'admin/admin.html')
-			break
-		case '/cashier':
-			resp.filePath = path.join(PAGESDIR, 'cashier/cashier.html')
-			break
-		case '/display':
-			resp.filePath = path.join(PAGESDIR, 'display/display.html')
-			break
+	switch (extension) {
+		case HTML:
+			return HTML
+		case JS:
+			return JS
+		case SCSS:
+			return SCSS
 		default:
-			resp.filePath = __dist
+			return new Error("FileType not supported")
 	}
+}
 
-	const usplit = url.split('.')
-	switch (usplit[usplit.length - 1]) {
-		case 'js':
-			resp.contentType = JS;
-			break;
-		case 'css':
-			resp.contentType = CSS;
-			break;
-	}
+function getContentType(fileType: string): string {
+	return MIME[fileType]
+}
 
-	return resp
-
+function getPath(fileName: string, fileType: string): string {
+	const dirName = fileName
+	console.log(`TODAAAAA >>>>> ${fileName} --- ${fileType}`)
+	return fs.realpathSync(`${process.cwd()}/dst/pages/${dirName}/${fileName}.${fileType}`)
 }
