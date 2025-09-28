@@ -1,11 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 base="dst/pages"
 src="src/pages"
 
 [ -d dst ] || { echo "falta dst"; exit 1; }
 
-for f in $src/*/*.html; do
+for f in $src/*/*; do
+  if [[ "${f: -3}" == ".ts" ]]; then
+	  continue
+  fi
   subdir=$(basename "$(dirname "$f")")
   if [ -d "$base/$subdir" ]; then
     cp -f "$f" "$base/$subdir/"
