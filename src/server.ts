@@ -1,14 +1,36 @@
 import http, { ServerResponse } from 'node:http';
 import fs from 'node:fs';
 
+const PORT = 8000
+const HOST = "127.0.0.1"
+
 const HTML = "html"
 const SCSS = "scss"
 const JS = "js"
+const JPG = "jpg"
+const JPEG = "jpeg"
+const PNG = "png"
+const ICO = "ico"
+const CSV = "csv"
+const SUPPORTED_FILE_TYPES = [
+	HTML,
+	SCSS,
+	JS,
+	JPG,
+	JPEG,
+	PNG,
+	ICO,
+	CSV
+]
 
-const MIME: { [key: string]: string } = {
+const MIMETYPE: { [key: string]: string } = {
 	"html": "text/html; charset=utf-8",
 	"scss": "text/css; charset=utf-8",
 	"js": "application/javascript; charset=utf-8",
+	"jpg": "image/jpeg",
+	"jpeg": "image/jpeg",
+	"png": "image/png",
+	"csv": "text/csv"
 	// ".json": "application/json; charset=utf-8",
 };
 
@@ -19,11 +41,10 @@ const ROUTES = [
 	"display"
 ];
 
-// interface IResp {
-// 	ContentType: string,
-// 	FileType: string,
-// 	FileName: string,
-// }
+const ASSETS = [
+	"assets/img/test"
+]
+
 
 const server = http.createServer((req: http.IncomingMessage, res: ServerResponse) => {
 	const urlBody = req.url?.split("?")[0]
@@ -31,25 +52,27 @@ const server = http.createServer((req: http.IncomingMessage, res: ServerResponse
 	console.log(`req.url -> ${URL}`)
 
 	if (URL == undefined) {
+		console.log("Dentro de URL == undenfined con: " + URL)
 		res.writeHead(400);
 		res.end('URL is undefined');
 		return;
 	}
-	const fileName = getFileName(URL)
-	console.log("Luego de URL == undenfined con: " + URL)
-	if (!ROUTES.includes(fileName)) {
-		res.writeHead(404);
-		res.end('Page Not Found');
-		return;
-	}
-	console.log("Luego de !ROUTES.includes(URL) con: " + URL)
-
 	const fileType: string | Error = getFileType(URL)
 	if (fileType instanceof Error) {
+		console.log(fileType.message)
 		res.writeHead(404);
 		res.end('Page does not exist');
 		return;
 	}
+	const fileName = getFileName(URL)
+
+	if (!ROUTES.includes(fileName) && !ASSETS.includes(fileName)) {
+		console.log("Dentro de !ROUTES.includes(URL) con: " + URL + " y filename: " + fileName)
+		res.writeHead(404);
+		res.end('Page Not Found');
+		return;
+	}
+
 	const contentType = getContentType(fileType)
 	const filePath = getPath(fileName, fileType)
 	try {
@@ -58,6 +81,7 @@ const server = http.createServer((req: http.IncomingMessage, res: ServerResponse
 		res.end(data);
 	} catch (err) {
 		if (err) {
+			console.log(err)
 			res.writeHead(404);
 			res.end('Page Not Found');
 			return;
@@ -66,12 +90,13 @@ const server = http.createServer((req: http.IncomingMessage, res: ServerResponse
 });
 
 server.listen({
-	host: '0.0.0.0',
-	port: 8000
+	host: HOST,
+	port: PORT
+}, () => {
+	console.log(`Listening on http://${HOST}:${PORT}`);
 });
 
 function getFileName(url: string): string {
-	console.log(`@@@@@@ ${url.slice(1).split('.')[0]}`)
 	if (!url.includes(".")) {
 		return url.slice(1)
 	}
@@ -83,26 +108,21 @@ function getFileType(url: string): string | Error {
 		return HTML
 	}
 	const extension = url.split('.')[1]
-	console.log("WWWWWWWW" + " " + extension)
-
-	switch (extension) {
-		case HTML:
-			return HTML
-		case JS:
-			return JS
-		case SCSS:
-			return SCSS
-		default:
-			return new Error("FileType not supported")
+	if (SUPPORTED_FILE_TYPES.includes(extension)) {
+		return extension
 	}
+	return new Error("FileType not supported")
 }
 
 function getContentType(fileType: string): string {
-	return MIME[fileType]
+	return MIMETYPE[fileType]
 }
 
 function getPath(fileName: string, fileType: string): string {
 	const dirName = fileName
-	console.log(`TODAAAAA >>>>> ${fileName} --- ${fileType}`)
-	return fs.realpathSync(`${process.cwd()}/dst/pages/${dirName}/${fileName}.${fileType}`)
+	if (fileType == HTML || fileType == SCSS || fileType == JS) {
+		return fs.realpathSync(`${process.cwd()}/dst/pages/${dirName}/${fileName}.${fileType}`)
+	}
+	console.log("getPath returns: " + `${process.cwd()}/${fileName}.${fileType}`)
+	return fs.realpathSync(`${process.cwd()}/${fileName}.${fileType}`)
 }
