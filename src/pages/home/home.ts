@@ -1,8 +1,17 @@
-function saludar3() {
-	console.log('hola che')
-}
+const buttonToAdminPage = document.getElementById("admin-button");
 
-const botonsito3 = document.getElementById('boton')
-if (botonsito3 != null) {
-	botonsito3.addEventListener('click', saludar3)
-}
+const buttonToCashierPage = document.getElementById("cashier-button");
+
+const buttonToDisplayPage = document.getElementById("display-button");
+
+buttonToAdminPage?.addEventListener("click", () => {
+  window.location.href = "/admin";
+})
+
+buttonToCashierPage?.addEventListener("click", () => {
+  window.location.href = "/cashier";
+})
+
+buttonToDisplayPage?.addEventListener("click", () => {
+  window.location.href = "/display";
+})
