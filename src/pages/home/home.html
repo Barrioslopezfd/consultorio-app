@@ -1,14 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Consultorio APP</title>
-	<script type="module" src="./home.js"></script>
-		<link rel="stylesheet" href="./home.scss"></link>
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <script type="module" src="./home.js"></script>
+    <link rel="stylesheet" href="./home.scss" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-	<button id="boton">Hola</button>
+    <h2 class="h2-title">Sistema de cola de pacientes</h2>
+    <h3 class="h3-title">Gestión eficiente de colas por orden de llegada</h3>
+    <main class="home-main-container">
+      <article class="cards-container">
+        <img src="/assets/img/users.jpg" alt="icono de usuario">
+        <h3>Administrador</h3>
+        <p>Gestiona usuarios, cajeros y supervisa toda la cola de pacientes</p>
+        <button id="admin-button">Acceder como Administrador</button>
+      </article>
+      <article class="cards-container">
+        <img src="/assets/img/cajeros.jpg" alt="icono de cajeros">
+        <h3>Cajero</h3>
+        <p>Interfaz para atender pacientes y gestionar tu caja asignada</p>
+        <button id="cashier-button">Acceder como Cajero</button>
+      </article>
+      <article class="cards-container">
+        <img src="/assets/img/visualizacion.jpg" alt="icono de visualizacion">
+        <h3>Visualización</h3>
+        <p>Pantalla pública para mostrar la cola de espera actual</p>
+        <button id="display-button">Ver Cola de Espera</button>
+      </article>
+    </main>
+    <footer class="home-footer-container">
+      <article>
+        <h2>Características del Sistema</h2>
+        <div class="footer-div-container">
+          <h3>✓ Gestión de Cola</h3>
+          <p>Orden de llegada automático</p>
+        </div>
+        <div class="footer-div-container">
+          <h3>✓ Múltiples Cajas</h3>
+          <p>Asignación inteligente de pacientes</p>
+        </div>
+        <div class="footer-div-container">
+          <h3>✓ Tiempo Real</h3>
+          <p>Actualizaciones instantáneas</p>
+        </div>
+        <div class="footer-div-container">
+          <h3>✓ Control Total</h3>
+          <p>Administración completa del sistema</p>
+        </div>
+    </article>
   </body>
 </html>

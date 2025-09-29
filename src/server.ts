@@ -2,7 +2,7 @@ import http, { ServerResponse } from 'node:http';
 import fs from 'node:fs';
 
 const PORT = 8000
-const HOST = "127.0.0.1"
+const HOST = "0.0.0.0"
 
 const HTML = "html"
 const SCSS = "scss"
@@ -42,7 +42,9 @@ const ROUTES = [
 ];
 
 const ASSETS = [
-	"assets/img/test"
+	"assets/img/users",
+	"assets/img/cajeros",
+	"assets/img/visualizacion"
 ]
 
 
