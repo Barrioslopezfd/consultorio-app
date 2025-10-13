@@ -6,7 +6,7 @@ src="src/pages"
 [ -d dst ] || { echo "falta dst"; exit 1; }
 
 for f in $src/*/*; do
-  if [[ "${f: -3}" == ".ts" ]]; then
+  if [[ "${f: -3}" == ".ts" || "${f: -5}" == ".scss" ]]; then
 	  continue
   fi
   subdir=$(basename "$(dirname "$f")")

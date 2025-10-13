@@ -39,8 +39,16 @@ body {
   font-size: 2.3em;
   margin: 20px 0 10px 0;
   color: #101828;
+  background-color: red;
+
+  @media (max-width: $resol950) {
+    .h2-title {
+      background-color: blue;
+    }
+  }
 
   @include resol950 {
+    background-color: blue;
     font-size: 1.8em;
   }
 
