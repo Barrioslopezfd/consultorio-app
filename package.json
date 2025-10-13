@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc; sass src:dst",
     "start": "npm run build && ./scripts/copy_files && node dst/server.js"
   },
   "repository": {
@@ -22,5 +22,8 @@
     "@types/node": "^24.3.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "sass": "^1.93.2"
   }
 }

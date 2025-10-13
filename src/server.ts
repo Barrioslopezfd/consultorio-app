@@ -5,7 +5,7 @@ const PORT = 8000
 const HOST = "0.0.0.0"
 
 const HTML = "html"
-const SCSS = "scss"
+const CSS = "css"
 const JS = "js"
 const JPG = "jpg"
 const JPEG = "jpeg"
@@ -14,7 +14,7 @@ const ICO = "ico"
 const CSV = "csv"
 const SUPPORTED_FILE_TYPES = [
 	HTML,
-	SCSS,
+	CSS,
 	JS,
 	JPG,
 	JPEG,
@@ -25,7 +25,7 @@ const SUPPORTED_FILE_TYPES = [
 
 const MIMETYPE: { [key: string]: string } = {
 	"html": "text/html; charset=utf-8",
-	"scss": "text/css; charset=utf-8",
+	"css": "text/css; charset=utf-8",
 	"js": "application/javascript; charset=utf-8",
 	"jpg": "image/jpeg",
 	"jpeg": "image/jpeg",
@@ -122,7 +122,7 @@ function getContentType(fileType: string): string {
 
 function getPath(fileName: string, fileType: string): string {
 	const dirName = fileName
-	if (fileType == HTML || fileType == SCSS || fileType == JS) {
+	if (fileType == HTML || fileType == CSS || fileType == JS) {
 		return fs.realpathSync(`${process.cwd()}/dst/pages/${dirName}/${fileName}.${fileType}`)
 	}
 	console.log("getPath returns: " + `${process.cwd()}/${fileName}.${fileType}`)
