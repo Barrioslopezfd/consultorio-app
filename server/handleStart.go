@@ -15,5 +15,5 @@ func newDir(relativePath string) {
 func newFile(relativePath string, fileName string) {
 	
 	fullPath := relativePath
-	if _, err := os.NewFile()
+	if _, err := os.WriteFile
 }
