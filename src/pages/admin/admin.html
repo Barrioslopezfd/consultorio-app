@@ -3,11 +3,37 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultorio APP</title>
+    <title>Panel de Aministración</title>
 	<script type="module" src="./admin.js"></script>
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="stylesheet" href="./admin.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-	  <p>Admin page</p>
+    <main class="admin-main">
+      <h2 class="h2-title">Administración</h2>
+      <section>
+        <h3>Cajeros</h3>
+        <button id="btn-crear-cajero">Crear nuevo cajero</button>
+        <ul id="cajeros-list"></ul>
+      </section>
+    </main>
+
+    <!-- Modal para crear cajero -->
+    <div id="modal-crear-cajero" class="modal" style="display: none;">
+      <div class="modal-content">
+        <h3>Crear Nuevo Cajero</h3>
+        <input type="text" id="input-nombre-cajero" placeholder="Nombre del cajero" />
+        <div class="modal-buttons">
+          <button id="btn-confirmar-crear">Crear</button>
+          <button id="btn-cancelar-crear">Cancelar</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,9 +1,9 @@
-$resol400: 400px;
-$resol600: 600px;
 $resol950: 950px;
+$resol600: 600px;
+$resol400: 400px;
 
-@mixin resol400 {
-  @media screen and (max-width: $resol400) {
+@mixin resol950 {
+  @media screen and (max-width: $resol950) {
     @content;
   }
 }
@@ -14,8 +14,8 @@ $resol950: 950px;
   }
 }
 
-@mixin resol950 {
-  @media screen and (max-width: $resol950) {
+@mixin resol400 {
+  @media screen and (max-width: $resol400) {
     @content;
   }
 }
@@ -39,16 +39,8 @@ body {
   font-size: 2.3em;
   margin: 20px 0 10px 0;
   color: #101828;
-  background-color: red;
-
-  @media (max-width: $resol950) {
-    .h2-title {
-      background-color: blue;
-    }
-  }
 
   @include resol950 {
-    background-color: blue;
     font-size: 1.8em;
   }
 
@@ -144,7 +136,6 @@ body {
   }
 
   @include resol950 {
-    flex-direction: column;
     gap: 15px;
     margin: 20px 0 0 0;
   }

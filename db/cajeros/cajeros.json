@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "nombre": "prueba cajero",
+    "activo": true
+  },
+  {
+    "id": 2,
+    "nombre": "prueba cajero 2",
+    "activo": true
+  },
+  {
+    "id": 3,
+    "nombre": "probando pe",
+    "activo": true
+  }
+]

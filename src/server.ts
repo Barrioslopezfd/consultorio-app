@@ -1,5 +1,6 @@
 import http, { ServerResponse } from 'node:http';
 import fs from 'node:fs';
+import { obtenerCajeros, crearCajero, obtenerSiguienteId } from './services/CajeroService.js';
 
 const PORT = 8000
 const HOST = "0.0.0.0"
@@ -52,6 +53,41 @@ const server = http.createServer((req: http.IncomingMessage, res: ServerResponse
 	const urlBody = req.url?.split("?")[0]
 	const URL = urlBody == "/" ? "/home" : urlBody
 	console.log(`req.url -> ${URL}`)
+
+	// rutas API
+    if (URL?.startsWith('/api/')) {
+        if (req.method === 'GET' && URL === '/api/cajeros') {
+            const cajeros = obtenerCajeros();
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(cajeros));
+            return;
+        }
+
+        if (req.method === 'POST' && URL === '/api/cajeros') {
+            let body = '';
+            req.on('data', chunk => {
+                body += chunk.toString();
+            });
+            req.on('end', () => {
+                try {
+                    const { nombre } = JSON.parse(body);
+                    const nuevoId = obtenerSiguienteId();
+                    crearCajero(nombre, nuevoId);
+                    res.writeHead(201, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: true, id: nuevoId }));
+                } catch (err) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Error al crear cajero' }));
+                }
+            });
+            return;
+        }
+
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'API route not found' }));
+        return;
+    }
+	// -----
 
 	if (URL == undefined) {
 		console.log("Dentro de URL == undenfined con: " + URL)
